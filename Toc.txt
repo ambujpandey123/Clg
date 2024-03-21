@@ -1,5 +1,4 @@
-[18/03, 7:27 am]: exp 3 : 
-
+[18/03, 7:27 am]: exp 3 : GENERATE DERIVATION SECQUENCE LANGUAGE 
 
 def generate_derivation(grammar, start_symbol, sequence, max_depth=10):
     derivation_sequences = []
@@ -41,7 +40,8 @@ for i, deriv_seq in enumerate(derivation_sequences, 1):
 
 
 
-[18/03, 7:27 am] : exp 4 : 
+
+[18/03, 7:27 am] : exp 4 : ACCEPTS_THREE_CONSECUTIVE_ONES
 
 
 def accepts_three_consecutive_ones(input_str):
@@ -69,8 +69,9 @@ else:
     print("Rejected: The string does not contain three consecutive '1's.")
 
 
- exp 2 : 
 
+
+ exp 2 : GENERATE REGULAR EXPRESSION TO GRAMMER
 
 import re
 
@@ -110,8 +111,9 @@ regex_dict = generate_regex_from_grammar(grammar)
 for non_terminal, regex in regex_dict.items():
     print(f"{non_terminal} -> {regex}")
 
-    
-###₹₹#₹₹₹₹₹   input an bn cn *""""""
+
+
+###₹₹#₹₹₹₹₹   input a^n b^n c^n *""""""
 
 import pandas as pd
 
