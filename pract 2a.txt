@@ -1,0 +1,90 @@
+Create an Android application to design screens using different layouts and UI including Button, Edittext,
+Textview, Radio Button
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select your gender:" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_below="@id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_below="@id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your name" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_below="@id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+</RelativeLayout>
+
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var textView: TextView
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var radioButtonMale: RadioButton
+    private lateinit var radioButtonFemale: RadioButton
+    private lateinit var editText: EditText
+    private lateinit var button: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textView = findViewById(R.id.textView)
+        radioGroup = findViewById(R.id.radioGroup)
+        radioButtonMale = findViewById(R.id.radioButtonMale)
+        radioButtonFemale = findViewById(R.id.radioButtonFemale)
+        editText = findViewById(R.id.editText)
+        button = findViewById(R.id.button)
+
+        button.setOnClickListener {
+            val gender = if (radioButtonMale.isChecked) "Male" else "Female"
+            val name = editText.text.toString()
+
+            val message = "Name: $name\nGender: $gender"
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+}

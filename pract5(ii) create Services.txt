@@ -1,0 +1,131 @@
+Program 5(ii)-Create an Android application to create and use services
+activity_main.xml file-
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/startServiceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Service"/>
+
+    <Button
+        android:id="@+id/stopServiceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop Service"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
+
++---------MainActivity.kt--------
+
+ import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val startServiceButton = findViewById<Button>(R.id.startServiceButton)
+        val stopServiceButton = findViewById<Button>(R.id.stopServiceButton)
+
+        startServiceButton.setOnClickListener {
+            val serviceIntent = Intent(this, MyForegroundService::class.java)
+            serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
+            startService(serviceIntent)
+        }
+
+        stopServiceButton.setOnClickListener {
+            val serviceIntent = Intent(this, MyForegroundService::class.java)
+            stopService(serviceIntent)
+        }
+    }
+}
+
++-------AndroidManifest.xml-------
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.foregroundserviceexample">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        ... >
+
+        <service android:name=".MyForegroundService" />
+
+        ...
+
+    </application>
+
+</manifest>
+
+name in the Project(RightClick) -> New -> Kotlin File/Class
++-------MyForegroundService---
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.IBinder
+import androidx.core.app.NotificationCompat
+
+class MyForegroundService : Service() {
+
+    companion object {
+        const val CHANNEL_ID = "ForegroundServiceChannel"
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val input = intent?.getStringExtra("inputExtra") ?: ""
+
+        createNotificationChannel()
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Foreground Service")
+            .setContentText(input)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        startForeground(1, notification)
+
+        // Do some long-running task in the background
+        // ...
+
+        return START_NOT_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
+                "Foreground Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(serviceChannel)
+        }
+    }
+}

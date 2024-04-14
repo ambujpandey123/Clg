@@ -1,0 +1,100 @@
+Program 4(ii)-Create an application to demonstrate shared preferences
+activit_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter text"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_below="@id/editText"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/showButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show"
+        android:layout_below="@id/saveButton"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/showButton"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
+
+
+MainActivity.kt
+
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+
+class MainActivity : AppCompatActivity() {
+
+    // Define SharedPreferences object
+    private lateinit var sharedPreferences: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
+        val editText = findViewById<EditText>(R.id.editText)
+        val saveButton = findViewById<Button>(R.id.saveButton)
+        val showButton = findViewById<Button>(R.id.showButton)
+        val textView = findViewById<TextView>(R.id.textView)
+
+        // Save button click listener
+        saveButton.setOnClickListener {
+            val inputText = editText.text.toString()
+            // Save text to SharedPreferences
+            saveText(inputText)
+        }
+
+        // Show button click listener
+        showButton.setOnClickListener {
+            // Retrieve text from SharedPreferences and display it
+            val savedText = loadText()
+            textView.text = savedText
+        }
+    }
+
+    // Function to save text to SharedPreferences
+    private fun saveText(text: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("savedText", text)
+        editor.apply()
+    }
+
+    // Function to retrieve text from SharedPreferences
+    private fun loadText(): String {
+        return sharedPreferences.getString("savedText", "") ?: ""
+    }
+}

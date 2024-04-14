@@ -1,0 +1,157 @@
+------------------------------------------------------------------------------------------------------------
+
+Program 1:
+------------------------------------------------------------------------------------------------------------
+
+
+PROGRAM 1 A: write a program using kotlin to implement control structures and loops
+
+
+Using if-else statement
+Output :
+fun main(args: Array<String>) {
+val a = -9
+val b = -11
+val max = if (a > b) {
+println("$a is larger than
+$b.")
+println("max variable holds value of a.")
+a
+} else {
+println("$b is larger than $a.")
+println("max variable holds value of b.")
+b
+}
+println("max = $max")
+}
+Output:
+If-elseif ladder:
+fun main(args: Array<String>) {
+val number = 0
+val result = if (number > 0)
+"positive number"
+else if (number < 0)
+"negative number"
+else
+"zero"
+println("number is $result")
+}
+Output:
+Nested if statements:
+fun main(args: Array<String>) {
+val n1 = 3
+val n2 = 5
+val n3 = -2
+val max = if (n1 > n2) {
+if (n1 > n3)
+n1
+else
+n3
+} else {
+if (n2 > n3)
+n2
+else
+n3
+}
+println("max = $max")
+}
+Output:
+When statement:
+fun main(args: Array<String>) {
+val day = 4
+val result = when (day) {
+1 -> "Monday"
+2 -> "Tuesday"
+3 -> "Wednesday"
+4 -> "Thursday"
+5 -> "Friday"
+6 -> "Saturday"
+7 -> "Sunday"
+else -> "Invalid day."
+}
+println(result)
+}
+Output:
+Using readline for talking input at runtime
+fun main(args: Array<String>) {
+val a = 12
+val b = 5
+println("Enter operator either +, -, * or /")
+val operator = readLine()
+val result = when (operator) {
+"+" -> a + b
+"-" -> a - b
+"*" -> a * b
+"/" -> a / b
+else -> "$operator operator is invalid operator."
+}
+println("result = $result")
+}
+Output:
+While loop:
+// Program to compute the sum of natural numbers from 1 to 100.
+fun main(args: Array<String>) {
+var sum = 0
+var i = 100
+while (i != 0) {
+sum += i // sum = sum + i;
+--i
+}
+println("sum = $sum")
+}
+Output:
+Do-while loop:
+fun main(args: Array<String>) {
+var sum: Int = 0
+var input: String
+do {
+print("Enter an integer: ")
+input = readLine()!!
+sum += input.toInt()
+} while (input != "0")
+println("sum = $sum")
+}
+Output:
+For loop using range function:
+fun main(args: Array<String>) {
+print("for (i in 1..5) print(i) = ")
+for (i in 1..5) print(i)
+println()
+print("for (i in 5..1) print(i) = ")
+for (i in 5..1) print(i) // prints nothing
+println()
+print("for (i in 5 downTo 1) print(i) = ")
+for (i in 5 downTo 1) print(i)
+println()
+print("for (i in 1..5 step 2) print(i) = ")
+for (i in 1..5 step 2) print(i)
+println()
+print("for (i in 5 downTo 1 step 2) print(i) = ")
+for (i in 5 downTo 1 step 2) print(i)
+}
+Output:
+Program 1B:
+-------------------------------------------------------------------------------------------------------------
+Write a program to implement object-oriented concepts in Kotlin.
+class Lamp {
+// property (data member)
+private var isOn: Boolean = false
+// member function
+fun turnOn() {
+isOn = true
+}
+// member function
+fun turnOff() {
+isOn = false
+}
+fun displayLightStatus() {
+if (isOn == true)
+println("lamp is on.")
+else
+println("lamp is off.")
+}
+}
+fun main(args: Array<String>) {
+val lamp = Lamp()
+lamp.displayLightStatus()
+}

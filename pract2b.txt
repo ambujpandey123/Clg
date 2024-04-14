@@ -1,0 +1,174 @@
+Program 2(ii)-
+Write an android application demonstrating response to event/user interaction for
+a. Checkbox
+b. Radio button
+c. Button
+d. Spinner
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/questionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to show the question"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionTextView"
+        android:visibility="gone"
+        android:text="Select your gender:" />
+
+    <RadioGroup
+        android:id="@+id/genderRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/questionText">
+
+        <RadioButton
+            android:id="@+id/maleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/femaleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+
+        <RadioButton
+            android:id="@+id/otherRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other" />
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/checkBoxOption1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 1"
+        android:layout_below="@id/genderRadioGroup" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOption2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 2"
+        android:layout_below="@id/checkBoxOption1" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkBoxOption2" />
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/spinner" />
+
+</RelativeLayout>
+
+
+
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var questionTextView: TextView
+    private lateinit var questionText: TextView
+    private lateinit var genderRadioGroup: RadioGroup
+    private lateinit var maleRadioButton: RadioButton
+    private lateinit var femaleRadioButton: RadioButton
+    private lateinit var otherRadioButton: RadioButton
+    private lateinit var checkBoxOption1: CheckBox
+    private lateinit var checkBoxOption2: CheckBox
+    private lateinit var spinner: Spinner
+    private lateinit var buttonSubmit: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        questionTextView = findViewById(R.id.questionTextView)
+        questionText = findViewById(R.id.questionText)
+        genderRadioGroup = findViewById(R.id.genderRadioGroup)
+        maleRadioButton = findViewById(R.id.maleRadioButton)
+        femaleRadioButton = findViewById(R.id.femaleRadioButton)
+        otherRadioButton = findViewById(R.id.otherRadioButton)
+        checkBoxOption1 = findViewById(R.id.checkBoxOption1)
+        checkBoxOption2 = findViewById(R.id.checkBoxOption2)
+        spinner = findViewById(R.id.spinner)
+        buttonSubmit = findViewById(R.id.buttonSubmit)
+
+        // Set up spinner with custom adapter
+        val items = listOf("Red", "Blue", "Green")
+        val adapter = CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        questionTextView.setOnClickListener {
+            questionText.visibility = if (questionText.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+
+        buttonSubmit.setOnClickListener {
+            val selectedGender = when (genderRadioGroup.checkedRadioButtonId) {
+                R.id.maleRadioButton -> "Male"
+                R.id.femaleRadioButton -> "Female"
+                R.id.otherRadioButton -> "Other"
+                else -> "No gender selected"
+            }
+
+            val checkBoxOption1Checked = checkBoxOption1.isChecked
+            val checkBoxOption2Checked = checkBoxOption2.isChecked
+            val spinnerSelectedItem = spinner.selectedItem.toString()
+
+            val message = "Selected gender: $selectedGender\nCheckBox Option 1: $checkBoxOption1Checked\nCheckBox Option 2: $checkBoxOption2Checked\nSpinner: $spinnerSelectedItem"
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        }
+    }
+}
+
+class CustomSpinnerAdapter(context: Context, resource: Int, private val items: List<String>) :
+    ArrayAdapter<String>(context, resource, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(android.R.layout.simple_spinner_item, parent, false)
+        val textView = view.findViewById<TextView>(android.R.id.text1)
+        textView.text = items[position]
+        return view
+    }
+
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(android.R.layout.simple_spinner_dropdown_item, parent, false)
+        val textView = view.findViewById<TextView>(android.R.id.text1)
+        textView.text = items[position]
+        return view
+    }
+}

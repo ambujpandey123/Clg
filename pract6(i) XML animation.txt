@@ -1,0 +1,67 @@
+Program 6(i):-Create an Android application to demonstrate XML based animation
+Activity_main.xml File:-
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@color/colorPrimary" <!-- Added closing quote -->
+        android:text="Let's Bounce"
+        android:textColor="#ffffff" />
+
+</RelativeLayout>
+
++------MainActivity.kt-------
+
+package com.example.sycspractical6i
+
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Button
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // loading Animation from
+        val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+
+        // getting the Button from activity_main.xml file
+        val button: Button = findViewById(R.id.button)
+
+        button.setOnClickListener {
+            // start the animation
+            button.startAnimation(animation)
+        }
+    }
+}
+
+app -> src -> main -> res(Right-click) -> New -> Android Resource Directory -> type to 'anim' and click 'OK'.
+anim directory(right-click) -> New -> Animation resource file. Name the file 'bounce' and click 'OK'.
++----bounce.xml-----
+
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/bounce_interpolator">
+    <scale
+        android:duration="500"
+        android:fromXScale="0.5"
+        android:fromYScale="0.5"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+</set>

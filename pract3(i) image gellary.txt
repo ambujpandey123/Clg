@@ -1,0 +1,126 @@
+MainActivity.kt
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.AdapterView
+import android.widget.GridView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private val imageList = intArrayOf(
+        R.drawable.image1,
+        R.drawable.image2,
+        R.drawable.image3,
+        // Add more images as needed
+    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val gridView: GridView = findViewById(R.id.gridView)
+        val adapter = ImageAdapter(this, imageList)
+        gridView.adapter = adapter
+
+        gridView.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                val intent = Intent(this@MainActivity, AboutImageActivity::class.java)
+                intent.putExtra("image", imageList[position])
+                startActivity(intent)
+            }
+    }
+}
+
+Right-click on the package where you want to create the file (e.g., com.example.gridviewexample) and select New -> Kotlin File/Class.
+Name the file -> ImageAdapter
+2. ImageAdapter.kt
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
+
+class ImageAdapter(private val context: Context, private val images: IntArray) : BaseAdapter() {
+
+    override fun getCount(): Int {
+        return images.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return images[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var imageView = convertView
+        if (imageView == null) {
+            imageView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false)
+        }
+
+        val image: ImageView = imageView!!.findViewById(R.id.imageView)
+        image.setImageResource(images[position])
+
+        return imageView
+    }
+}
+
+Right-click on package  New > Kotlin File/Class.
+Name the file-> AboutImageActivity
+3.AboutImageActivity.kt
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_about_image.*
+
+class AboutImageActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_about_image)
+
+        val image = intent.getIntExtra("image", R.drawable.default_image)
+        imageView.setImageResource(image)
+    }
+}
+
+
+4.activity_main.xml
+
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gridView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnWidth="100dp"
+    android:gravity="center"
+    android:numColumns="auto_fit"
+    android:stretchMode="columnWidth" />
+
+
+res/layout directory of your project, right-click and select New -> Layout resource file.
+Name the file grid_item.xml and click OK.
+5.grid_item.xml
+
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/imageView"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:scaleType="centerCrop"
+    android:padding="8dp" />
+
+
+Right-click on the res/layout directory in the Project view.
+Go to New > Layout resource file.
+Name the file activity_about_image.xml
+6. activity_about_image.xml
+
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/imageView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="fitCenter" />

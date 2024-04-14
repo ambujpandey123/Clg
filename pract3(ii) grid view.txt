@@ -1,0 +1,122 @@
+Program 3(ii)-
+Create an application to use Gridview for shopping cart application
+Add the following code to res/layout/activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
+        android:padding="8dp"
+        android:columnWidth="100dp"
+        android:gravity="center"/>
+
+</RelativeLayout>
+
++-----MainActivity.kt------
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.GridView
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val gridView: GridView = findViewById(R.id.gridView)
+
+        val photos = arrayOf(
+            R.drawable.img1,
+            R.drawable.img2,
+            R.drawable.img3,
+            // Add more photo resource IDs as needed
+        )
+        val names = arrayOf(
+            "Photo 1",
+            "Photo 2",
+            "Photo 3",
+            // Add more photo names as needed
+        )
+
+        val adapter = PhotoAdapter(this, photos, names)
+        gridView.adapter = adapter
+    }
+}
+
+Right-click Project -> New -> Kotlin File/Class. Enter.
+Name the file 'PhotoAdapter' and click 'OK'.
++----------PhotoAdapter.kt-------
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
+
+class PhotoAdapter(private val context: Context, private val photos: Array<Int>, private val names: Array<String>) : BaseAdapter() {
+
+    override fun getCount(): Int {
+        return photos.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return photos[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view = convertView
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false)
+        }
+
+        val photoImageView = view!!.findViewById<ImageView>(R.id.photoImageView)
+        val nameTextView = view.findViewById<TextView>(R.id.nameTextView)
+
+        photoImageView.setImageResource(photos[position])
+        nameTextView.text = names[position]
+
+        return view
+    }
+}
+
+res/layout(Right-click) -> New -> Layout resource file.
+Name the file 'grid_item.xml' and click 'OK'.
++------grid_item.xml------
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/photoImageView"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"/>
+
+</RelativeLayout>
